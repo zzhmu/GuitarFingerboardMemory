@@ -2,12 +2,15 @@ import tkinter as tk
 import os
 import random
 from image_path import *
-import PIL
+from PIL import Image, ImageTk
+
+# import PIL
 
 
 class UI:
-    def __init__(self, window):
+    def __init__(self, window, canvas):
         self.window = window
+        self.canvas = canvas
         self.frame = tk.Frame(self.window)
         self.frame.pack()
         button1 = tk.Button(self.frame, text="音阶识别", command=self.SwitchToScale)
@@ -36,6 +39,7 @@ class UI:
         button2.pack()
 
     def SwitchToScale(self):
+        self.label.image = None
         self.delete_button(self.frame)
         self.frame = tk.Frame(self.window)
         self.frame.pack()
@@ -44,19 +48,36 @@ class UI:
             text="大调音阶",
             command=lambda: self.SwitchToImage(majorScales_path),
         )
-        button1.pack()
+        button1.grid(row=0, column=0)
+        # button1.pack(side=tk.LEFT)
         button2 = tk.Button(
             self.frame,
             text="小调音阶",
             command=lambda: self.SwitchToImage(majorScales_path),
         )
-        button2.pack()
+        button2.grid(row=0, column=1)
+        # button2.pack(side=tk.LEFT)
+        button4 = tk.Button(
+            self.frame,
+            text="大调五声音阶",
+            command=lambda: self.SwitchToImage(majorScales_path),
+        )
+        button4.grid(row=0, column=2)
+        # button4.pack(side=tk.LEFT)
+        button5 = tk.Button(
+            self.frame,
+            text="小调五声音阶",
+            command=lambda: self.SwitchToImage(majorScales_path),
+        )
+        button5.grid(row=0, column=3)
+        # button5.pack(side=tk.LEFT)
         button3 = tk.Button(
             self.frame,
             text="返回",
             command=self.SwitchToIni,
         )
-        button3.pack()
+        button3.grid(row=0, column=4)
+        # button3.pack()
 
     def SwitchToImage(self, path):
         self.delete_button(self.frame)
@@ -86,11 +107,16 @@ class UI:
         if len(image_files) > 0:
             selected_file = random.choice(image_files)
             file_path = os.path.join(path, selected_file)
-            image = PIL.Image.open(file_path)
+            image = Image.open(file_path)
             scaled_image = image.resize((200, 200))
-            photo = PIL.ImageTk.PhotoImage(scaled_image)
-            self.label.configure(image=photo)
-            self.label.image = photo
+            self.photo = ImageTk.PhotoImage(scaled_image)
+            # self.label.configure(image=photo)
+            # self.label.image = photo
+            # 加载要叠加的图层图片
+            # overlay_image = tk.PhotoImage(file=image)
+            self.canvas.itemconfigure(
+                self.canvas.find_withtag("fingerboard"), image=self.photo
+            )
 
     def SwitchButton(root, new_button_text, switch_func):
         # 获取当前按钮所在的父控件和当前按钮
