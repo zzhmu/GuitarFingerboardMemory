@@ -49,34 +49,48 @@ class UI:
             command=lambda: self.SwitchToImage(majorScales_path),
         )
         button1.grid(row=0, column=0)
-        # button1.pack(side=tk.LEFT)
+
         button2 = tk.Button(
             self.frame,
             text="小调音阶",
-            command=lambda: self.SwitchToImage(majorScales_path),
+            command=lambda: self.SwitchToImage(minorScales_path),
         )
         button2.grid(row=0, column=1)
-        # button2.pack(side=tk.LEFT)
+
         button4 = tk.Button(
             self.frame,
             text="大调五声音阶",
-            command=lambda: self.SwitchToImage(majorScales_path),
+            command=lambda: self.SwitchToImage(majorPenScales_path),
         )
         button4.grid(row=0, column=2)
-        # button4.pack(side=tk.LEFT)
+
         button5 = tk.Button(
             self.frame,
             text="小调五声音阶",
-            command=lambda: self.SwitchToImage(majorScales_path),
+            command=lambda: self.SwitchToImage(minorPenScales_path),
         )
         button5.grid(row=0, column=3)
-        # button5.pack(side=tk.LEFT)
+
+        button6 = tk.Button(
+            self.frame,
+            text="大调布鲁斯音阶",
+            command=lambda: self.SwitchToImage(majorBluesScales_path),
+        )
+        button6.grid(row=0, column=4)
+
+        button7 = tk.Button(
+            self.frame,
+            text="大调布鲁斯音阶",
+            command=lambda: self.SwitchToImage(minorBluesScales_path),
+        )
+        button7.grid(row=0, column=5)
+
         button3 = tk.Button(
             self.frame,
             text="返回",
             command=self.SwitchToIni,
         )
-        button3.grid(row=0, column=4)
+        button3.grid(row=0, column=6)
         # button3.pack()
 
     def SwitchToImage(self, path):
@@ -108,12 +122,8 @@ class UI:
             selected_file = random.choice(image_files)
             file_path = os.path.join(path, selected_file)
             image = Image.open(file_path)
-            scaled_image = image.resize((200, 200))
-            self.photo = ImageTk.PhotoImage(scaled_image)
-            # self.label.configure(image=photo)
-            # self.label.image = photo
-            # 加载要叠加的图层图片
-            # overlay_image = tk.PhotoImage(file=image)
+            self.photo = ImageTk.PhotoImage(image)
+
             self.canvas.itemconfigure(
                 self.canvas.find_withtag("fingerboard"), image=self.photo
             )
